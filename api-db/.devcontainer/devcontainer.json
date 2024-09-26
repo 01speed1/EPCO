@@ -1,0 +1,31 @@
+{
+  "name": "Node.js DB API Container",
+  "workspaceFolder": "/code",
+  "mounts": [
+    {
+      "source": "${localWorkspaceFolder}",
+      "target": "/code",
+      "type": "bind"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "Prisma.prisma",
+        "Gruntfuggly.todo-tree"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "postCreateCommand": "if [ -f package-lock.json ]; then pnpm install; fi",
+  "dockerComposeFile": "../../docker-compose.yml",
+  "service": "api-db",
+  "runServices": [
+    "api-db",
+    "mongo1"
+  ],
+  "overrideCommand": true
+}

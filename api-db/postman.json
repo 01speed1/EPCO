@@ -1,0 +1,136 @@
+{
+  "info": {
+    "name": "API Collection",
+    "_postman_id": "12345-67890-abcdef",
+    "description": "Collection for API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Client",
+      "item": [
+        {
+          "name": "Register Client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document\": \"123456789\",\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/client/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["client", "register"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wallet",
+      "item": [
+        {
+          "name": "Recharge Wallet",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document\": \"123456789\",\n  \"phone\": \"9876543210\",\n  \"amount\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/wallet/recharge",
+              "host": ["{{baseUrl}}"],
+              "path": ["wallet", "recharge"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Balance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wallet/balance?document=123456789&phone=9876543210",
+              "host": ["{{baseUrl}}"],
+              "path": ["wallet", "balance"],
+              "query": [
+                {
+                  "key": "document",
+                  "value": "123456789"
+                },
+                {
+                  "key": "phone",
+                  "value": "9876543210"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document\": \"123456789\",\n  \"phone\": \"9876543210\",\n  \"amount\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payment/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"session-id\",\n  \"token\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payment/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "confirm"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

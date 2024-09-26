@@ -1,0 +1,35 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Client {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  document String  @unique
+  name     String
+  email    String  @unique
+  phone    String
+  wallet   Wallet?
+}
+
+model Wallet {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  balance  Float     @default(0.0)
+  clientId String    @unique @db.ObjectId
+  client   Client    @relation(fields: [clientId], references: [id])
+  payments Payment[]
+}
+
+model Payment {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  amount    Float
+  token     String
+  sessionId String
+  confirmed Boolean @default(false)
+  walletId  String  @db.ObjectId
+  wallet    Wallet  @relation(fields: [walletId], references: [id])
+}
