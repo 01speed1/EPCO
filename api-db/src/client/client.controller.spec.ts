@@ -15,15 +15,26 @@ describe('ClientController', () => {
         {
           provide: ClientService,
           useValue: {
-            registerClient: jest.fn().mockResolvedValue({ id: 1, document: '123456', name: 'John Doe', email: 'john@example.com', phone: '1234567890' }),
+            registerClient: jest
+              .fn()
+              .mockResolvedValue({
+                id: 1,
+                document: '123456',
+                name: 'John Doe',
+                email: 'john@example.com',
+                phone: '1234567890',
+                password: 'secret',
+              }),
           },
         },
         {
           provide: WalletService,
           useValue: {
-            createWallet: jest.fn().mockResolvedValue({ id: 1, clientId: 1, balance: 0 }),
+            createWallet: jest
+              .fn()
+              .mockResolvedValue({ id: 1, clientId: 1, balance: 0 }),
           },
-        }
+        },
       ],
     }).compile();
 
@@ -38,16 +49,47 @@ describe('ClientController', () => {
 
   describe('registerClient', () => {
     it('should call ClientService.registerClient with correct parameters', async () => {
-      const body = { document: '123456', name: 'John Doe', email: 'john@example.com', phone: '1234567890' };
+      const body = {
+        document: '123456',
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+        password: 'secret',
+      };
       await controller.registerClient(body);
       expect(clientService.registerClient).toHaveBeenCalledWith(body);
       expect(clientService.registerClient).toHaveBeenCalledTimes(1);
     });
 
-    it('should return the result from ClientService.registerClient', async () => {
-      const body = { document: '123456', name: 'John Doe', email: 'john@example.com', phone: '1234567890' };
+    it('should call WalletService.createWallet with correct clientId', async () => {
+      const body = {
+        document: '123456',
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+        password: 'secret',
+      };
+      await controller.registerClient(body);
+      expect(walletService.createWallet).toHaveBeenCalledWith(1);
+      expect(walletService.createWallet).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return the result from ClientService.registerClient without password', async () => {
+      const body = {
+        document: '123456',
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+        password: 'secret',
+      };
       const result = await controller.registerClient(body);
-      expect(result).toEqual({ id: 1, document: '123456', name: 'John Doe', email: 'john@example.com', phone: '1234567890' });
+      expect(result).toEqual({
+        id: 1,
+        document: '123456',
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '1234567890',
+      });
     });
   });
 });

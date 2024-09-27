@@ -4,7 +4,10 @@ import { WalletService } from '../wallet/wallet.service';
 
 @Controller('client')
 export class ClientController {
-  constructor(private readonly clientService: ClientService, private readonly walletService: WalletService) {}
+  constructor(
+    private readonly clientService: ClientService,
+    private readonly walletService: WalletService,
+  ) {}
 
   @Post('register')
   async registerClient(
@@ -14,10 +17,13 @@ export class ClientController {
       name: string;
       email: string;
       phone: string;
+      password: string;
     },
   ) {
     const createdClient = await this.clientService.registerClient(body);
     await this.walletService.createWallet(createdClient.id);
+
+    delete createdClient.password;
 
     return createdClient;
   }

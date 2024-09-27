@@ -62,7 +62,7 @@ describe('MailService', () => {
     await service.sendMail(to, subject, text);
 
     expect(transporterMock.sendMail).toHaveBeenCalledWith({
-      from: '"NestJS App" <noreply@example.com>',
+      from: '"Wallet App" <noreply@example.com>',
       to,
       subject,
       text,

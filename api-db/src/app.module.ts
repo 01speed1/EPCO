@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { MailService } from './mail/mail.service';
 
 import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AppController } from './app.controller';
     ClientModule,
     WalletModule,
     PaymentModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailService],

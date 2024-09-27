@@ -6,7 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PaymentService {
-  constructor(private readonly prisma: PrismaService, private readonly mail: MailService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mail: MailService,
+  ) {}
 
   async createPayment(data: {
     document: string;
@@ -41,7 +44,11 @@ export class PaymentService {
       },
     });
 
-    await this.mail.sendMail(client.email, 'Payment Confirmation', `Your token is: ${token}`);
+    await this.mail.sendMail(
+      client.email,
+      'Payment Confirmation',
+      `Your token is: ${token}`,
+    );
 
     return { sessionId, token };
   }

@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentService } from './payment.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { v4 as uuidv4 } from 'uuid';
+import { MailService } from '../mail/mail.service';
+import { ConfigService } from '@nestjs/config';
 
 jest.mock('uuid', () => ({
   v4: jest.fn().mockReturnValue('test-session-id'),
@@ -10,16 +11,20 @@ jest.mock('uuid', () => ({
 describe('PaymentService', () => {
   let service: PaymentService;
   let prisma: PrismaService;
+  let mailService: MailService;
+  let configService: ConfigService;
 
   const sessionId = 'test-session-id';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PaymentService, PrismaService],
+      providers: [PaymentService, PrismaService, MailService, ConfigService],
     }).compile();
 
     service = module.get<PaymentService>(PaymentService);
     prisma = module.get<PrismaService>(PrismaService);
+    mailService = module.get<MailService>(MailService);
+    configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {
@@ -29,7 +34,12 @@ describe('PaymentService', () => {
   describe('createPayment', () => {
     it('should create a payment successfully', async () => {
       const data = { document: '123456789', phone: '1234567890', amount: 100 };
-      const client = { id: 1, document: '123456789', phone: '1234567890' };
+      const client = {
+        id: 1,
+        document: '123456789',
+        phone: '1234567890',
+        email: 'test@example.com',
+      };
       const wallet = { id: 1, clientId: 1, balance: 200 };
 
       const token = '211110';
@@ -37,7 +47,8 @@ describe('PaymentService', () => {
       prisma.client.findUnique = jest.fn().mockResolvedValue(client);
       prisma.wallet.findUnique = jest.fn().mockResolvedValue(wallet);
       prisma.payment.create = jest.fn().mockResolvedValue({});
-      
+      mailService.sendMail = jest.fn().mockResolvedValue({});
+
       jest.spyOn(global.Math, 'random').mockReturnValue(0.123456);
 
       const result = await service.createPayment(data);
@@ -57,6 +68,11 @@ describe('PaymentService', () => {
           walletId: wallet.id,
         },
       });
+      expect(mailService.sendMail).toHaveBeenCalledWith(
+        client.email,
+        'Payment Confirmation',
+        `Your token is: ${token}`,
+      );
     });
 
     it('should throw an error if client is not found', async () => {
